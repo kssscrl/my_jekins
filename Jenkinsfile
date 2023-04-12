@@ -1,26 +1,27 @@
-pipeline{
+pipeline {
     agent any
     tools {
         jdk 'my_jdk'
         maven 'my_maven'
     }
 
-    stages{
-      
-       stage('Build'){
-            steps{
-                sh 'sudo ./mvnw clean install'
+    stages {
+        stage('Build') {
+            steps {
+                withMaven(maven: 'my_maven') {
+                    sh 'mvn clean install'
+                }
             }
-         }
+        }
 
         stage('SonarQube analysis') {
-//    def scannerHome = tool 'SonarScanner 4.0';
-        	steps{
-       	 withSonarQubeEnv('Sonarqube-10.0') { 
-       		sh "./mvnw sonar:sonar"
-    	}
-               }
+            steps {
+                withMaven(maven: 'my_maven') {
+                    withSonarQubeEnv('Sonarqube-10.0') {
+                        sh 'mvn sonar:sonar'
+                    }
+                }
+            }
         }
-       
-    }	
+    }
 }
