@@ -1,0 +1,19 @@
+---
+- name: Configure web server
+  hosts: web_server
+  remote_user: root
+  gather_facts: no
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - nginx
+        state: present
+        update_cache: yes
+
+    - name: Ensure Nginx is running and enabled
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
