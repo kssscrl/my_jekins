@@ -20,6 +20,19 @@
         name: nginx
         state: started
         enabled: yes
+      
+      
+    - name: Debug Nginx service status
+      become: yes
+      command: systemctl status nginx
+      register: nginx_status
+      failed_when: false
+      changed_when: false
+
+    - name: Display Nginx service status
+      debug:
+        var: nginx_status.stdout_lines
+
 
     - name: Create application directory
       become: yes
@@ -54,15 +67,5 @@
         state: started
         enabled: yes
         
-    - name: Debug Nginx service status
-      become: yes
-      command: systemctl status nginx
-      register: nginx_status
-      failed_when: false
-      changed_when: false
-
-    - name: Display Nginx service status
-      debug:
-        var: nginx_status.stdout_lines
 
 
