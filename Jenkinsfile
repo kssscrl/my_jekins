@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        jdk 'JDK 8'  // Replace with the correct JDK version available in your Jenkins instance
+        jdk 'JDK 20'  // Replace with the correct JDK version available in your Jenkins instance
         maven 'Maven'
         ansible 'Ansible' // Replace with the name you used when defining the Ansible installation
     }
