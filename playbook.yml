@@ -17,3 +17,16 @@
         name: nginx
         state: started
         enabled: yes
+
+    - name: Configure web server
+      hosts: webservers
+      become: yes
+      tasks:
+        - name: Install required packages
+          apt:
+            name:
+              - package1
+              - package2
+            state: present
+            update_cache: yes
+        ---
