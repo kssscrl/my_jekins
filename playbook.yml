@@ -10,11 +10,47 @@
       apt:
         name:
           - nginx
+          - openjdk-11-jre-headless
         state: present
         update_cache: yes
 
     - name: Ensure Nginx is running and enabled
+      become: yes
       systemd:
         name: nginx
         state: started
         enabled: yes
+
+    - name: Create application directory
+      become: yes
+      file:
+        path: /opt/petclinic
+        state: directory
+        owner: yijiay
+        group: yijiay
+        mode: '0755'
+
+    - name: Copy PetClinic JAR file to web server
+      become: yes
+      synchronize:
+        src: /var/jenkins_home/workspace/petclinic_pipeline/target/petclinic.jar
+        dest: /opt/petclinic/petclinic.jar
+
+    - name: Create PetClinic service file
+      become: yes
+      template:
+        src: petclinic.service.j2
+        dest: /etc/systemd/system/petclinic.service
+
+    - name: Reload systemd configuration
+      become: yes
+      systemd:
+        daemon_reload: yes
+
+    - name: Ensure PetClinic service is running and enabled
+      become: yes
+      systemd:
+        name: petclinic
+        state: started
+        enabled: yes
+
