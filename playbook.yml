@@ -43,6 +43,14 @@
         owner: yijiay
         group: yijiay
         mode: '0755'
+        
+    - name: Install rsync on Jenkins build server
+      become: yes
+      apt:
+        name: rsync
+        state: present
+        update_cache: yes
+      delegate_to: localhost
 
     - name: Copy PetClinic JAR file to web server
       become: yes
