@@ -1,26 +1,28 @@
-pipeline{
+pipeline {
     agent any
     tools {
-        jdk 'my_jdk'
-        maven 'my_maven'
+        jdk 'JDK 8'  // Replace with the correct JDK version available in your Jenkins instance
+        maven 'Maven'
+        ansible 'Ansible' // Replace with the name you used when defining the Ansible installation
     }
 
-    stages{
-      
-       stage('Build'){
-            steps{
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/r2999xu/my-spring-petclinic.git'
+            }
+        }
+
+        stage('Build Application') {
+            steps {
                 sh 'mvn clean install'
             }
-         }
-
-        stage('SonarQube analysis') {
-//    def scannerHome = tool 'SonarScanner 4.0';
-        	steps{
-       	 withSonarQubeEnv('Sonarqube-10.0') { 
-       		sh "mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=admin -Dsonar.password=YYJyyj317&"
-    	}
-               }
         }
-       
-    }	
+
+        stage('Deploy Application') {
+            steps {
+                sh 'ansible-playbook -i inventory.ini playbook.yml'
+            }
+        }
+    }
 }
