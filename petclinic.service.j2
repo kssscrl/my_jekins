@@ -1,0 +1,15 @@
+[Unit]
+Description=PetClinic Application
+After=syslog.target
+
+[Service]
+User=yijiay
+WorkingDirectory=/opt/petclinic
+ExecStart=/usr/bin/java -jar /opt/petclinic/petclinic.jar
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
