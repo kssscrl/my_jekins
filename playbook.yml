@@ -1,7 +1,7 @@
 ---
 - name: Configure web server
   hosts: web_server
-  remote_user: root
+  remote_user: yijiay
   gather_facts: no
 
   tasks:
