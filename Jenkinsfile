@@ -22,7 +22,13 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-
+        
+    stage('Archive JAR file') {
+                steps {
+                    archiveArtifacts artifacts: 'target/petclinic.jar', fingerprint: true
+                }
+            }
+        
         stage('Deploy Application') {
             steps {
                 sh 'ansible-playbook -i inventory.ini playbook.yml'
