@@ -5,16 +5,29 @@
   gather_facts: no
   
   tasks:
-    - name: Install required packages
-      become: yes
-      apt:
-        name:
-          - nginx
-        state: present
-        update_cache: yes
+      - name: Create a directory for the PetClinic app
+        become: yes
+        file:
+          path: /opt/petclinic
+          state: directory
 
-    - name: Ensure Nginx is running and enabled
-      systemd:
-        name: nginx
-        state: started
-        enabled: yes
+      - name: Fetch PetClinic JAR file from Jenkins
+        delegate_to: localhost
+        fetch:
+          src: /var/jenkins_home/workspace/deploy_using_ansible/target/petclinic.jar
+          dest: /tmp/petclinic.jar
+          flat: yes
+
+      - name: Copy PetClinic JAR file to target machine
+        become: yes
+        copy:
+          src: /tmp/petclinic.jar
+          dest: /opt/petclinic/spring-petclinic.jar
+          mode: 0644
+
+      - name: Run PetClinic application
+        become: yes
+        command: nohup java -jar /opt/petclinic/spring-petclinic.jar > /opt/petclinic/petclinic.log 2>&1 &
+        args:
+          chdir: /opt/petclinic
+          creates: /opt/petclinic/petclinic.log
