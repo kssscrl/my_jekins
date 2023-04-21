@@ -5,6 +5,10 @@ pipeline {
         maven 'Maven'
         ansible 'Ansible' 
     }
+    
+    environment {
+        ANSIBLE_HOST_KEY_CHECKING = 'False'
+    }
 
     stages {
         stage('Clone Repository') {
