@@ -5,6 +5,19 @@
   gather_facts: no
   
   tasks:
+      - name: Install OpenJDK 17 repository
+      become: yes
+      apt_repository:
+        repo: 'deb http://ppa.launchpad.net/openjdk-r/ppa/ubuntu focal main'
+        state: present
+        update_cache: yes
+
+      - name: Install OpenJDK 17
+        become: yes
+        apt:
+          name: openjdk-17-jdk
+          state: present
+          
       - name: Create a directory for the PetClinic app
         become: yes
         file:
