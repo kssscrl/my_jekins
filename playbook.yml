@@ -26,7 +26,7 @@
       lineinfile:
         path: /etc/environment
         line: JAVA_HOME="/opt/jdk-20"
-        state: present
+          state: present
 
     - name: Add Java to PATH
       become: yes
@@ -34,31 +34,31 @@
         path: /etc/environment
         line: 'PATH="/opt/jdk-20/bin:$PATH"'
         state: present
-  
-      - name: Create a directory for the PetClinic app
-        become: yes
-        file:
-          path: /opt/petclinic
-          state: directory
-  
 
-      - name: Fetch PetClinic JAR file from Jenkins
-        delegate_to: localhost
-        fetch:
-          src: /var/jenkins_home/workspace/petclinic_pipeline/target/petclinic.jar
-          dest: /tmp/petclinic.jar
-          flat: yes
+    - name: Create a directory for the PetClinic app
+      become: yes
+      file:
+        path: /opt/petclinic
+        state: directory
 
-      - name: Copy PetClinic JAR file to target machine
-        become: yes
-        copy:
-          src: /tmp/petclinic.jar
-          dest: /opt/petclinic/spring-petclinic.jar
-          mode: 0644
 
-      - name: Run PetClinic application
-        become: yes
-        command: nohup java -jar /opt/petclinic/spring-petclinic.jar > /opt/petclinic/petclinic.log 2>&1 &
-        args:
-          chdir: /opt/petclinic
-          creates: /opt/petclinic/petclinic.log
+    - name: Fetch PetClinic JAR file from Jenkins
+      delegate_to: localhost
+      fetch:
+        src: /var/jenkins_home/workspace/petclinic_pipeline/target/petclinic.jar
+        dest: /tmp/petclinic.jar
+        flat: yes
+
+    - name: Copy PetClinic JAR file to target machine
+      become: yes
+      copy:
+        src: /tmp/petclinic.jar
+        dest: /opt/petclinic/spring-petclinic.jar
+        mode: 0644
+
+    - name: Run PetClinic application
+      become: yes
+      command: nohup java -jar /opt/petclinic/spring-petclinic.jar > /opt/petclinic/petclinic.log 2>&1 &
+      args:
+        chdir: /opt/petclinic
+        creates: /opt/petclinic/petclinic.log
