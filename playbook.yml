@@ -26,7 +26,7 @@
       lineinfile:
         path: /etc/environment
         line: JAVA_HOME="/opt/jdk-20"
-          state: present
+        state: present
 
     - name: Add Java to PATH
       become: yes
