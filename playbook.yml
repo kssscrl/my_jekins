@@ -1,64 +1,12 @@
----
-- name: Configure web server
-  hosts: web_server
-  remote_user: yijiay
-  gather_facts: no
-  
+- name: Copy JAR file to container and execute
+  hosts: target
+  vars:
+    jar_file_path: /var/jenkins_home/workspace/petclinic_pipeline/target/petclinic.jar
   tasks:
-     
-    - name: Download Oracle JDK 20
-      become: yes
-      get_url:
-        url: https://download.oracle.com/java/20/archive/jdk-20_linux-aarch64_bin.tar.gz
-        dest: /test/jdk-20_linux-aarch64_bin.tar.gz
-        mode: 0644
-
-    - name: Extract Oracle JDK 20
-      become: yes
-      unarchive:
-        src: /test/jdk-20_linux-aarch64_bin.tar.gz
-        dest: /opt
-        remote_src: yes
-        creates: /opt/jdk-20
-
-    - name: Set JAVA_HOME environment variable
-      become: yes
-      lineinfile:
-        path: /etc/environment
-        line: JAVA_HOME="/opt/jdk-20"
-        state: present
-
-    - name: Add Java to PATH
-      become: yes
-      lineinfile:
-        path: /etc/environment
-        line: 'PATH="/opt/jdk-20/bin:$PATH"'
-        state: present
-
-    - name: Create a directory for the PetClinic app
-      become: yes
-      file:
-        path: /opt/petclinic
-        state: directory
-
-
-    - name: Fetch PetClinic JAR file from Jenkins
-      delegate_to: localhost
-      fetch:
-        src: /var/jenkins_home/workspace/petclinic_pipeline/target/petclinic.jar
-        dest: /tmp/petclinic.jar
-        flat: yes
-
-    - name: Copy PetClinic JAR file to target machine
-      become: yes
+    - name: Copy JAR file to target container
       copy:
-        src: /tmp/petclinic.jar
-        dest: /opt/petclinic/spring-petclinic.jar
-        mode: 0644
+        src: "{{ jar_file_path }}"
+        dest: "/"
 
-    - name: Run PetClinic application
-      become: yes
-      command: nohup /opt/jdk-20.0.1/bin/java -jar /opt/petclinic/spring-petclinic.jar > /opt/petclinic/petclinic.log 2>&1 &
-      args:
-        chdir: /opt/petclinic
-        creates: /opt/petclinic/petclinic.log
+    - name: Execute the jar file
+      shell: java -jar -Dserver.port=8090 -Dserver.address=172.24.0.2 /petclinic.jar
