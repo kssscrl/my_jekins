@@ -6,6 +6,12 @@
   
   tasks:
   
+      - name: Create a directory for the PetClinic app
+        become: yes
+        file:
+          path: /opt/petclinic
+          state: directory
+  
       - name: Download the JDK binaries
         get_url:
           url: https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.tar.gz
@@ -28,11 +34,7 @@
           - 'export PATH=$PATH:$JAVA_HOME/bin'
 
   
-      - name: Create a directory for the PetClinic app
-        become: yes
-        file:
-          path: /opt/petclinic
-          state: directory
+
 
       - name: Fetch PetClinic JAR file from Jenkins
         delegate_to: localhost
