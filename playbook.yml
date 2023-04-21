@@ -7,10 +7,10 @@
   tasks:
   
       - name: Download the JDK binaries
-      get_url:
-        url: https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.tar.gz
-        dest: /var/jenkins_home/jdk-20_linux-x64_bin.tar.gz
-        creates: /var/jenkins_home/jdk-20.0.1
+        get_url:
+          url: https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.tar.gz
+          dest: /var/jenkins_home/jdk-20_linux-x64_bin.tar.gz
+          creates: /var/jenkins_home/jdk-20.0.1
 
       - name: Unzip the downloaded file
         unarchive:
