@@ -3,7 +3,9 @@
   hosts: web_server
   remote_user: yijiay
   gather_facts: no
-
+  become: yes
+  become_method: su
+  
   tasks:
     - name: Install required packages
       become: yes
