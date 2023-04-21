@@ -58,7 +58,7 @@
 
     - name: Run PetClinic application
       become: yes
-      command: nohup java -jar /opt/petclinic/spring-petclinic.jar > /opt/petclinic/petclinic.log 2>&1 &
+      command: nohup /opt/jdk-20.0.1/bin/java -jar /opt/petclinic/spring-petclinic.jar > /opt/petclinic/petclinic.log 2>&1 &
       args:
         chdir: /opt/petclinic
         creates: /opt/petclinic/petclinic.log
