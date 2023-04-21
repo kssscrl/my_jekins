@@ -10,71 +10,11 @@
       apt:
         name:
           - nginx
-          - openjdk-11-jre-headless
         state: present
         update_cache: yes
 
     - name: Ensure Nginx is running and enabled
-      become: yes
       systemd:
         name: nginx
         state: started
         enabled: yes
-      ignore_errors: yes
-      
-      
-    - name: Debug Nginx service status
-      become: yes
-      command: systemctl status nginx
-      register: nginx_status
-      failed_when: false
-      changed_when: false
-
-    - name: Display Nginx service status
-      debug:
-        var: nginx_status.stdout_lines
-
-
-    - name: Create application directory
-      become: yes
-      file:
-        path: /opt/petclinic
-        state: directory
-        owner: yijiay
-        group: yijiay
-        mode: '0755'
-        
-    - name: Install rsync on Jenkins build server
-      become: yes
-      apt:
-        name: rsync
-        state: present
-        update_cache: yes
-      delegate_to: localhost
-
-    - name: Copy PetClinic JAR file to web server
-      become: yes
-      synchronize:
-        src: /var/jenkins_home/workspace/petclinic_pipeline/target/petclinic.jar
-        dest: /opt/petclinic/petclinic.jar
-
-    - name: Create PetClinic service file
-      become: yes
-      template:
-        src: petclinic.service.j2
-        dest: /etc/systemd/system/petclinic.service
-
-    - name: Reload systemd configuration
-      become: yes
-      systemd:
-        daemon_reload: yes
-
-    - name: Ensure PetClinic service is running and enabled
-      become: yes
-      systemd:
-        name: petclinic
-        state: started
-        enabled: yes
-        
-
-
