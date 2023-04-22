@@ -1,7 +1,7 @@
 ---
 - name: Deploy and run PetClinic application
   hosts: web_server
-  remote_user: yijiay
+  remote_user: yijia
   gather_facts: no
   
   tasks:
