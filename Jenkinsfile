@@ -31,7 +31,7 @@ pipeline {
         
         stage('Deploy Application') {
             steps {
-                sh 'ansible-playbook -i inventory.ini playbook.yml -vvv'
+                sh 'ansible-playbook -i inventory.ini playbook.yml'
             }
         }
     }
