@@ -1,6 +1,5 @@
 - name: Copy JAR file to container and execute
   hosts: web_server
-  remote_user: yijiay
   vars:
     jar_file_path: /var/jenkins_home/workspace/petclinic_pipeline/target/petclinic.jar
   tasks:
