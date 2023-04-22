@@ -9,4 +9,4 @@
         dest: "/"
 
     - name: Execute the jar file
-      shell: java -jar -Dserver.port=8090 -Dserver.address=172.24.0.2 /petclinic.jar
+      shell: java -jar -Dserver.port=8090 -Dserver.address=172.24.0.3 /petclinic.jar
