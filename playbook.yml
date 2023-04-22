@@ -28,17 +28,17 @@
     - name: Download Oracle JDK 20
       become: yes
       get_url:
-        url: https://download.oracle.com/java/20/archive/jdk-20_linux-aarch64_bin.tar.gz
-        dest: /tmp/jdk-20_linux-aarch64_bin.tar.gz
+        url: https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.tar.gz
+        dest: /tmp/jdk-20_linux-x64_bin.tar.gz
         mode: 0644
 
     - name: Extract Oracle JDK 20
       become: yes
       unarchive:
-        src: /tmp/jdk-20_linux-aarch64_bin.tar.gz
+        src: /tmp/jdk-20_linux-x64_bin.tar.gz
         dest: /opt
         remote_src: yes
-        creates: /opt/jdk-20
+        creates: /opt/jdk-20.0.1
 
     - name: Execute the jar file
-      shell: /opt/jdk-20/bin/java -jar -Dserver.port=8090 /opt/petclinic/spring-petclinic.jar
+      shell: /opt/jdk-20.0.1/bin/java -jar -Dserver.port=8090 /opt/petclinic/spring-petclinic.jar
